@@ -1,0 +1,85 @@
+baseURL: "https://yourdomain.com/"
+title: "Your Blog Title"
+locale: "en-us"
+theme: "PaperMod"
+paginate: 10
+
+enableRobotsTXT: true
+buildDrafts: false
+buildFuture: false
+buildExpired: false
+
+minify:
+  disableXML: true
+  minifyOutput: true
+
+params:
+  env: production
+  title: "Your Blog Title"
+  description: "Personal blog — notes, learnings, and documentation."
+  author: "Your Name"
+
+  defaultTheme: dark
+  disableThemeToggle: false
+
+  ShowReadingTime: true
+  ShowShareButtons: false
+  ShowPostNavLinks: true
+  ShowBreadCrumbs: true
+  ShowCodeCopyButtons: true
+  ShowWordCount: false
+  ShowRssButtonInSectionTermList: true
+  UseHugoToc: true
+  disableSpecial1stPost: false
+  disableScrollToTop: false
+  hidemeta: false
+  hideSummary: false
+  showtoc: true
+  tocopen: false
+
+  homeInfoParams:
+    Title: "Hi, I'm [Your Name]"
+    Content: "Welcome to my blog — I write about cloud infrastructure, software, and things I'm learning."
+
+  socialIcons:
+    - name: github
+      url: "https://github.com/ycloudo"
+
+  fuseOpts:
+    isCaseSensitive: false
+    shouldSort: true
+    location: 0
+    distance: 1000
+    threshold: 0.4
+    minMatchCharLength: 0
+    limit: 10
+    keys: ["title", "permalink", "summary", "content"]
+
+menu:
+  main:
+    - identifier: search
+      name: Search
+      url: /search/
+      weight: 10
+    - identifier: tags
+      name: Tags
+      url: /tags/
+      weight: 20
+    - identifier: categories
+      name: Categories
+      url: /categories/
+      weight: 30
+    - identifier: about
+      name: About
+      url: /about/
+      weight: 40
+
+taxonomies:
+  category: categories
+  tag: tags
+
+outputs:
+  home:
+    - HTML
+    - RSS
+    - JSON
