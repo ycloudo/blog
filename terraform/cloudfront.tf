@@ -60,7 +60,7 @@ resource "aws_cloudfront_distribution" "apex" {
     minimum_protocol_version = "TLSv1.2_2021"
   }
 
-  depends_on = [aws_acm_certificate.blog]
+  depends_on = [aws_acm_certificate_validation.blog]
 }
 
 # www redirect distribution
@@ -112,7 +112,7 @@ resource "aws_cloudfront_distribution" "www" {
     minimum_protocol_version = "TLSv1.2_2021"
   }
 
-  depends_on = [aws_acm_certificate.blog]
+  depends_on = [aws_acm_certificate_validation.blog]
 }
 
 # Allow CloudFront to read from the content S3 bucket

@@ -10,6 +10,13 @@ resource "aws_acm_certificate" "blog" {
   }
 }
 
+# Waits for the certificate to reach ISSUED status before CloudFront is created.
+# Add the CNAME records below in Cloudflare first, then run terraform apply.
+resource "aws_acm_certificate_validation" "blog" {
+  provider        = aws.us_east_1
+  certificate_arn = aws_acm_certificate.blog.arn
+}
+
 output "acm_validation_records" {
   description = "Add these CNAME records in Cloudflare to validate the ACM certificate"
   value = {
