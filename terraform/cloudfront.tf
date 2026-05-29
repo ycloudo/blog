@@ -1,6 +1,5 @@
 locals {
-  content_origin_id      = "s3-${var.domain}"
-  www_redirect_origin_id = "s3-www.${var.domain}"
+  content_origin_id = "s3-${var.domain}"
 }
 
 resource "aws_cloudfront_origin_access_control" "blog" {
@@ -63,58 +62,6 @@ resource "aws_cloudfront_distribution" "apex" {
   depends_on = [aws_acm_certificate_validation.blog]
 }
 
-# www redirect distribution
-resource "aws_cloudfront_distribution" "www" {
-  enabled         = true
-  is_ipv6_enabled = true
-  aliases         = ["www.${var.domain}"]
-
-  origin {
-    domain_name = aws_s3_bucket_website_configuration.www_redirect.website_endpoint
-    origin_id   = local.www_redirect_origin_id
-
-    custom_origin_config {
-      http_port              = 80
-      https_port             = 443
-      origin_protocol_policy = "http-only"
-      origin_ssl_protocols   = ["TLSv1.2"]
-    }
-  }
-
-  default_cache_behavior {
-    target_origin_id       = local.www_redirect_origin_id
-    viewer_protocol_policy = "redirect-to-https"
-    allowed_methods        = ["GET", "HEAD"]
-    cached_methods         = ["GET", "HEAD"]
-    compress               = true
-
-    forwarded_values {
-      query_string = false
-      cookies {
-        forward = "none"
-      }
-    }
-
-    min_ttl     = 0
-    default_ttl = 86400
-    max_ttl     = 86400
-  }
-
-  restrictions {
-    geo_restriction {
-      restriction_type = "none"
-    }
-  }
-
-  viewer_certificate {
-    acm_certificate_arn      = aws_acm_certificate.blog.arn
-    ssl_support_method       = "sni-only"
-    minimum_protocol_version = "TLSv1.2_2021"
-  }
-
-  depends_on = [aws_acm_certificate_validation.blog]
-}
-
 # Allow CloudFront to read from the content S3 bucket
 resource "aws_s3_bucket_policy" "content" {
   bucket = aws_s3_bucket.content.id
@@ -140,9 +87,4 @@ resource "aws_s3_bucket_policy" "content" {
 output "cloudfront_apex_domain" {
   description = "Add this as a CNAME (flattened) for ycloudo.com in Cloudflare"
   value       = aws_cloudfront_distribution.apex.domain_name
-}
-
-output "cloudfront_www_domain" {
-  description = "Add this as a CNAME for www.ycloudo.com in Cloudflare"
-  value       = aws_cloudfront_distribution.www.domain_name
 }
