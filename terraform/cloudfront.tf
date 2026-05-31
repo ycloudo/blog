@@ -88,3 +88,8 @@ output "cloudfront_apex_domain" {
   description = "Add this as a CNAME (flattened) for ycloudo.com in Cloudflare"
   value       = aws_cloudfront_distribution.apex.domain_name
 }
+
+output "cloudfront_distribution_id" {
+  description = "Store this as the CLOUDFRONT_DISTRIBUTION_ID variable in the GitHub repository"
+  value       = aws_cloudfront_distribution.apex.id
+}
