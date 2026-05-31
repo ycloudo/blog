@@ -5,10 +5,4 @@ url: "/about/"
 summary: "about"
 ---
 
-Hi, I'm [Your Name].
-
-I'm a developer learning cloud infrastructure through hands-on projects. This blog is where I document what I build, what I break, and what I learn along the way.
-
-Currently focused on AWS — S3, CloudFront, Route 53, Terraform, and CI/CD pipelines.
-
-Feel free to reach out on [GitHub](https://github.com/ycloudo).
+我是昀誠，畢業於國立政治大學資訊管理研究所，擅長以技術能力實現商業需求來創造價值。
