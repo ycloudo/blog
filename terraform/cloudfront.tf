@@ -2,6 +2,23 @@ locals {
   content_origin_id = "s3-${var.domain}"
 }
 
+resource "aws_cloudfront_function" "url_rewrite" {
+  name    = "url-rewrite"
+  runtime = "cloudfront-js-2.0"
+  publish = true
+  code    = <<-EOT
+    function handler(event) {
+      var uri = event.request.uri;
+      if (uri.endsWith("/")) {
+        event.request.uri += "index.html";
+      } else if (!uri.split("/").pop().includes(".")) {
+        event.request.uri += "/index.html";
+      }
+      return event.request;
+    }
+  EOT
+}
+
 resource "aws_cloudfront_origin_access_control" "blog" {
   name                              = var.domain
   origin_access_control_origin_type = "s3"
@@ -39,6 +56,11 @@ resource "aws_cloudfront_distribution" "apex" {
     min_ttl     = 0
     default_ttl = 3600
     max_ttl     = 86400
+
+    function_association {
+      event_type   = "viewer-request"
+      function_arn = aws_cloudfront_function.url_rewrite.arn
+    }
   }
 
   custom_error_response {
