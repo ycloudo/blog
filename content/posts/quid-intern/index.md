@@ -2,9 +2,20 @@
 title: "QUID 2025 SWE Intern 心得分享"
 date: 2025-09-27
 draft: false
+author: "ycloudo"
 tags:
     - 心得
+keywords:
+    - 實習
+    - 軟體工程師
+    - SWE intern
+    - QUID
+    - 心得
 description: "回想起剛踏入QUID辦公室的第一天，對於將展開的實習生活充滿期待。經過這451個日子的洗禮，我想透過這個心得來記錄這段奇妙的旅程，分享我在Content Acquisition Platform Team的日常，以及這趟旅程帶給我的深刻成長。"
+cover:
+    image: "cover.webp"
+    alt: "QUID 2025 SWE Intern 心得分享"
+    relative: true
 ---
 
 ### QUID之前

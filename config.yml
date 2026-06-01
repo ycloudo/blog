@@ -1,5 +1,6 @@
 baseURL: "https://ycloudo.com/"
 title: "Cloudo's Blog"
+languageCode: "zh-TW"
 locale: "zh-tw"
 theme: "PaperMod"
 paginate: 10
@@ -18,6 +19,7 @@ params:
     title: "Cloudo's Blog"
     description: "Personal blog — notes, learnings, and documentation."
     author: "ycloudo"
+    canonicalURL: true
 
     defaultTheme: white
     disableThemeToggle: false
@@ -73,6 +75,11 @@ menu:
 taxonomies:
     category: categories
     tag: tags
+
+sitemap:
+    changefreq: "weekly"
+    priority: 0.5
+    filename: "sitemap.xml"
 
 outputs:
     home:
