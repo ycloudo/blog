@@ -1,28 +1,68 @@
-name: Terraform
+name: CI
 
 on:
     pull_request:
         paths:
+            - "content/**"
+            - "config.yml"
+            - "static/**"
+            - "themes/**"
             - "terraform/**"
-    push:
-        branches: [main]
-        paths:
-            - "terraform/**"
-    workflow_dispatch:
 
 permissions:
     id-token: write
     contents: read
     pull-requests: write
 
-defaults:
-    run:
-        working-directory: terraform
-
 jobs:
-    plan:
-        if: github.event_name == 'pull_request'
+    changes:
         runs-on: ubuntu-latest
+        outputs:
+            site: ${{ steps.filter.outputs.site }}
+            tf: ${{ steps.filter.outputs.tf }}
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v6
+
+            - name: Detect changed paths
+              uses: dorny/paths-filter@v3
+              id: filter
+              with:
+                  filters: |
+                      site:
+                        - 'content/**'
+                        - 'config.yml'
+                        - 'static/**'
+                        - 'themes/**'
+                      tf:
+                        - 'terraform/**'
+
+    build-check:
+        needs: changes
+        if: needs.changes.outputs.site == 'true'
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v6
+              with:
+                  submodules: recursive
+
+            - name: Setup Hugo
+              uses: peaceiris/actions-hugo@v3
+              with:
+                  hugo-version: latest
+                  extended: true
+
+            - name: Build (check only, no deploy)
+              run: hugo --minify
+
+    tf-plan:
+        needs: changes
+        if: needs.changes.outputs.tf == 'true'
+        runs-on: ubuntu-latest
+        defaults:
+            run:
+                working-directory: terraform
         steps:
             - name: Checkout
               uses: actions/checkout@v6
@@ -94,25 +134,3 @@ jobs:
             - name: Fail if plan errored
               if: steps.plan.outcome == 'failure'
               run: exit 1
-
-    apply:
-        if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout
-              uses: actions/checkout@v6
-
-            - name: Configure AWS credentials
-              uses: aws-actions/configure-aws-credentials@v6
-              with:
-                  role-to-assume: ${{ secrets.AWS_TF_APPLY_ROLE_ARN }}
-                  aws-region: ap-northeast-1
-
-            - name: Setup Terraform
-              uses: hashicorp/setup-terraform@v3
-
-            - name: Init
-              run: terraform init
-
-            - name: Apply
-              run: terraform apply -auto-approve -input=false
