@@ -1,0 +1,84 @@
+name: Deployment
+
+on:
+    workflow_dispatch:
+        inputs:
+            target:
+                description: What to deploy
+                type: choice
+                options:
+                    - site
+                    - infra
+                    - both
+                default: site
+
+permissions:
+    id-token: write
+    contents: read
+
+jobs:
+    terraform-apply:
+        if: ${{ inputs.target == 'infra' || inputs.target == 'both' }}
+        runs-on: ubuntu-latest
+        defaults:
+            run:
+                working-directory: terraform
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v6
+
+            - name: Configure AWS credentials
+              uses: aws-actions/configure-aws-credentials@v6
+              with:
+                  role-to-assume: ${{ secrets.AWS_TF_APPLY_ROLE_ARN }}
+                  aws-region: ap-northeast-1
+
+            - name: Setup Terraform
+              uses: hashicorp/setup-terraform@v3
+
+            - name: Init
+              run: terraform init
+
+            - name: Apply
+              run: terraform apply -auto-approve -input=false
+
+    site-deploy:
+        needs: [terraform-apply]
+        # Run for site/both. always() lets this run even when terraform-apply is
+        # skipped (target=site); the result guard blocks it only on a real apply failure.
+        if: >
+            ${{
+              always() &&
+              (inputs.target == 'site' || inputs.target == 'both') &&
+              (needs.terraform-apply.result == 'success' || needs.terraform-apply.result == 'skipped')
+            }}
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v6
+              with:
+                  submodules: recursive
+
+            - name: Configure AWS credentials
+              uses: aws-actions/configure-aws-credentials@v6
+              with:
+                  role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+                  aws-region: ap-northeast-1
+
+            - name: Setup Hugo
+              uses: peaceiris/actions-hugo@v3
+              with:
+                  hugo-version: latest
+                  extended: true
+
+            - name: Build
+              run: hugo --minify
+
+            - name: Deploy to S3
+              run: aws s3 sync public/ s3://${{ vars.DOMAIN }} --delete
+
+            - name: Invalidate CloudFront
+              run: |
+                  aws cloudfront create-invalidation \
+                    --distribution-id "${{ vars.CLOUDFRONT_DISTRIBUTION_ID }}" \
+                    --paths "/*"
