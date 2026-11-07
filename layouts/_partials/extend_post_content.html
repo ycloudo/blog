@@ -9,7 +9,7 @@
     <h2 id="related-posts-title">相關文章</h2>
     <div class="writing-list">
       {{- range . }}
-      <a class="writing-row" href="{{ .RelPermalink }}"><time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006.01.02" }}</time><span>{{ .Title }}</span><span class="row-arrow" aria-hidden="true">↗</span></a>
+      <a class="writing-row" href="{{ .RelPermalink }}"><time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006.01.02" }}</time><span>{{ .Title }}</span></a>
       {{- end }}
     </div>
   </section>
