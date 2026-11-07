@@ -43,7 +43,7 @@ params:
     disableScrollToTop: false
     hidemeta: false
     hideSummary: false
-    showtoc: true
+    showtoc: false
     tocopen: false
 
     homeInfoParams:
