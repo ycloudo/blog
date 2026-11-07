@@ -4,6 +4,8 @@ on:
     pull_request:
         paths:
             - "content/**"
+            - "layouts/**"
+            - "assets/**"
             - "config.yml"
             - "static/**"
             - "themes/**"
@@ -31,6 +33,8 @@ jobs:
                   filters: |
                       site:
                         - 'content/**'
+                        - 'layouts/**'
+                        - 'assets/**'
                         - 'config.yml'
                         - 'static/**'
                         - 'themes/**'
