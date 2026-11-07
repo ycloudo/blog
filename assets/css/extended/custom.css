@@ -81,9 +81,13 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC
 
 /* A quieter landing page centered on the introduction. */
 .simple-home { min-height: calc(100vh - 155px); display: flex; flex-direction: column; justify-content: center; padding: 105px 0 85px; max-width: 800px; margin: 0 auto; }
+.simple-home-intro { text-align: center; }
 .simple-home-intro h1 { font: 400 clamp(42px, 6vw, 68px)/1.13 Georgia, "Times New Roman", serif; letter-spacing: -.05em; margin: 25px 0 10px; }
+.simple-home-intro h1::after { content: ""; display: block; width: 48px; height: 2px; background: #b99172; margin: 24px auto 0; }
 .simple-home-name { color: #a38a77; font-size: 15px; letter-spacing: .12em; }
-.simple-home-description { color: #766d64; font-size: 15px; line-height: 2; max-width: 520px; margin-top: 30px; }
+.simple-home-description { color: #766d64; font-size: 21px; line-height: 1.8; max-width: 680px; margin: 30px auto 0; }
+.typing-cursor { display: inline-block; width: 2px; height: 1em; margin-left: 3px; vertical-align: -0.1em; background: #b99172; animation: cursor-blink 1s step-end infinite; }
+@keyframes cursor-blink { 50% { opacity: 0; } }
 .simple-home-links { display: flex; gap: 25px; margin-top: 28px; }
 .simple-home-links a { color: #76604f; font-size: 13px; border-bottom: 1px solid #c5ad98; padding-bottom: 5px; }
 .simple-home-links span { margin-left: 7px; }

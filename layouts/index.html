@@ -2,7 +2,7 @@
 <div class="simple-home">
   <div class="simple-home-intro">
     <h1>Cloudo's space</h1>
-    <p class="simple-home-description">在這裡放一段簡單的自我介紹。</p>
+    <p class="simple-home-description" id="home-description">Hi, I’m Eric, a Data Engineer at TrendAI. I’m interested in backend development and data platforms. Here, I share my thoughts, what I build, and my observations of the world.</p>
   </div>
 </div>
 <div class="home-collections">
@@ -21,5 +21,28 @@
     {{ if $photos }}<div class="carousel-wrap"><div class="collection-track photo-track" id="home-photos" tabindex="0" aria-label="照片列表，可左右捲動">{{ range $photos }}{{ $thumb := .Resize "900x" }}<a class="collection-photo" href="{{ .RelPermalink }}" target="_blank" rel="noopener" aria-label="查看照片：{{ .Name | path.Base }}"><img src="{{ $thumb.RelPermalink }}" width="{{ $thumb.Width }}" height="{{ $thumb.Height }}" alt="{{ .Name | path.Base | strings.TrimSuffix (path.Ext .Name) }}" loading="lazy"></a>{{ end }}</div>{{ if gt (len $photos) 1 }}<div class="carousel-controls"><button type="button" data-track="home-photos" data-direction="-1" aria-label="上一張照片">←</button><button type="button" data-track="home-photos" data-direction="1" aria-label="下一張照片">→</button></div>{{ end }}</div>{{ else }}<p class="collection-empty">照片正在整理中，期待與你分享。</p>{{ end }}
   </section>
 </div>
-<script>document.querySelectorAll('.carousel-controls button').forEach(function(button){button.addEventListener('click',function(){var track=document.getElementById(button.dataset.track);var item=track.firstElementChild;if(item)track.scrollBy({left:(item.getBoundingClientRect().width+16)*Number(button.dataset.direction),behavior:'smooth'});});});</script>
+<script>
+(function () {
+  var description = document.getElementById('home-description');
+  if (description && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    var text = description.textContent.match(/\S+\s*/gu) || [];
+    var index = 0;
+    description.setAttribute('aria-label', description.textContent);
+    description.textContent = '';
+    var typed = document.createElement('span');
+    var cursor = document.createElement('span');
+    typed.setAttribute('aria-hidden', 'true');
+    cursor.setAttribute('aria-hidden', 'true');
+    cursor.className = 'typing-cursor';
+    description.append(typed, cursor);
+    function type() {
+      typed.textContent += text[index++];
+      if (index < text.length) window.setTimeout(type, 120);
+      else cursor.remove();
+    }
+    type();
+  }
+  document.querySelectorAll('.carousel-controls button').forEach(function(button){button.addEventListener('click',function(){var track=document.getElementById(button.dataset.track);var item=track.firstElementChild;if(item)track.scrollBy({left:(item.getBoundingClientRect().width+16)*Number(button.dataset.direction),behavior:'smooth'});});});
+}());
+</script>
 {{ end }}
