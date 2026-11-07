@@ -21,6 +21,12 @@ params:
     author: "ycloudo"
     canonicalURL: true
 
+    assets:
+        favicon: "icons/cloud-32.png"
+        favicon16x16: "icons/cloud-16.png"
+        favicon32x32: "icons/cloud-32.png"
+        apple_touch_icon: "icons/cloud-180.png"
+
     defaultTheme: light
     disableThemeToggle: true
 
