@@ -1,4 +1,4 @@
 {{ define "main" }}
 <div class="interior-page"><header class="interior-header"><p class="eyebrow">SELECTED WORK / 作品紀錄</p><h1>Projects</h1><p>從想法到實踐，一些正在做和做過的事。</p></header>
-{{ $projects := where site.RegularPages "Section" "projects" }}{{ if $projects }}<div class="project-grid">{{ range $projects.ByDate.Reverse }}<a class="project-card" href="{{ .RelPermalink }}"><span class="project-number">{{ .Date.Format "2006" }} / PROJECT ↗</span><h2>{{ .Title }}</h2><p>{{ .Summary | plainify | truncate 160 }}</p></a>{{ end }}</div>{{ else }}<div class="empty-state"><span>✳</span><h2>More to come.</h2><p>作品正在整理中，之後會在這裡分享。</p></div>{{ end }}</div>
+{{ $projects := where site.RegularPages "Section" "projects" }}{{ if $projects }}<div class="project-grid">{{ range $projects.ByDate.Reverse }}<a class="project-card" href="{{ .RelPermalink }}"><span class="project-number">{{ .Date.Format "2006" }} / PROJECT</span><h2>{{ .Title }}</h2><p>{{ .Summary | plainify | truncate 160 }}</p></a>{{ end }}</div>{{ else }}<div class="empty-state"><span>✳</span><h2>More to come.</h2><p>作品正在整理中，之後會在這裡分享。</p></div>{{ end }}</div>
 {{ end }}
