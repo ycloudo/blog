@@ -1,0 +1,5 @@
+{{ define "main" }}
+<div class="interior-page"><header class="interior-header"><p class="eyebrow">WORDS & STORIES / 文字紀錄</p><h1>Archive</h1><p>關於工作、學習和生活的點滴。</p></header>
+{{ range (where site.RegularPages "Section" "posts").GroupByDate "2006" }}<section class="archive-group"><h2>{{ .Key }}</h2><div class="writing-list">{{ range .Pages }}<a class="writing-row" href="{{ .RelPermalink }}"><time>{{ .Date.Format "01.02" }}</time><span>{{ .Title }}</span><span class="row-arrow">↗</span></a>{{ end }}</div></section>{{ end }}
+</div>
+{{ end }}

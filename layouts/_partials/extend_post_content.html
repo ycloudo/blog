@@ -1,0 +1,17 @@
+{{- if and (eq .Section "posts") .Params.tags -}}
+  {{- $related := slice -}}
+  {{- range .GetTerms "tags" -}}
+    {{- $related = union $related (where .Pages "Section" "posts") -}}
+  {{- end -}}
+  {{- $related = where $related "RelPermalink" "ne" .RelPermalink -}}
+  {{- with first 3 (sort $related "Date" "desc") -}}
+  <section class="related-posts" aria-labelledby="related-posts-title">
+    <h2 id="related-posts-title">相關文章</h2>
+    <div class="writing-list">
+      {{- range . }}
+      <a class="writing-row" href="{{ .RelPermalink }}"><time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006.01.02" }}</time><span>{{ .Title }}</span><span class="row-arrow" aria-hidden="true">↗</span></a>
+      {{- end }}
+    </div>
+  </section>
+  {{- end -}}
+{{- end -}}

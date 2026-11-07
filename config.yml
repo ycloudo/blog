@@ -1,5 +1,5 @@
 baseURL: "https://ycloudo.com/"
-title: "Cloudo's Blog"
+title: "Cloudo's space"
 languageCode: "zh-TW"
 locale: "zh-tw"
 theme: "PaperMod"
@@ -16,17 +16,18 @@ minify:
 
 params:
     env: production
-    title: "Cloudo's Blog"
+    title: "Cloudo's space"
     description: "Personal blog — notes, learnings, and documentation."
     author: "ycloudo"
     canonicalURL: true
 
-    defaultTheme: white
-    disableThemeToggle: false
+    defaultTheme: light
+    disableThemeToggle: true
 
-    ShowReadingTime: true
+    ShowReadingTime: false
+    hideAuthor: true
     ShowShareButtons: false
-    ShowPostNavLinks: true
+    ShowPostNavLinks: false
     ShowBreadCrumbs: true
     ShowCodeCopyButtons: true
     ShowWordCount: false
@@ -59,18 +60,26 @@ params:
 
 menu:
     main:
-        - identifier: search
-          name: Search
-          url: /search/
+        - identifier: home
+          name: Home
+          url: /
           weight: 10
-        - identifier: tags
-          name: Tags
-          url: /tags/
-          weight: 20
         - identifier: about
           name: About
           url: /about/
+          weight: 20
+        - identifier: archive
+          name: Archive
+          url: /archive/
+          weight: 30
+        - identifier: projects
+          name: Projects
+          url: /projects/
           weight: 40
+        - identifier: gallery
+          name: Gallery
+          url: /gallery/
+          weight: 50
 
 taxonomies:
     category: categories
