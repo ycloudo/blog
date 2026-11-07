@@ -1,0 +1,5 @@
+{{ define "main" }}
+<div class="interior-page gallery-page"><header class="interior-header"><p class="eyebrow">THROUGH THE LENS / 攝影紀錄</p><h1>Gallery</h1><p>一些值得留下來的風景與日常。</p></header>
+{{ $photos := slice }}{{ range resources.Match "gallery/*" }}{{ if eq .ResourceType "image" }}{{ $photos = $photos | append . }}{{ end }}{{ end }}
+{{ if $photos }}<div class="photo-grid">{{ range $photos }}{{ if eq .ResourceType "image" }}{{ $thumb := .Resize "1200x" }}<figure><a href="{{ .RelPermalink }}" target="_blank" rel="noopener" aria-label="查看照片：{{ .Name }}"><img src="{{ $thumb.RelPermalink }}" width="{{ $thumb.Width }}" height="{{ $thumb.Height }}" alt="{{ .Name | path.Base | strings.TrimSuffix (path.Ext .Name) }}" loading="lazy"></a></figure>{{ end }}{{ end }}</div>{{ else }}<div class="empty-state"><span>✳</span><h2>Moments to come.</h2><p>照片正在整理中，期待與你分享。</p></div>{{ end }}</div>
+{{ end }}

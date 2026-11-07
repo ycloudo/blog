@@ -1,0 +1,25 @@
+{{ define "main" }}
+<div class="simple-home">
+  <div class="simple-home-intro">
+    <h1>Cloudo's space</h1>
+    <p class="simple-home-description">在這裡放一段簡單的自我介紹。</p>
+  </div>
+</div>
+<div class="home-collections">
+  <section class="collection-section collection-writing" aria-labelledby="recent-title">
+    <div class="collection-heading"><div><p class="collection-label">01 / WRITING</p><h2 id="recent-title">Recent posts</h2></div><a href="{{ "archive/" | relURL }}">View archive ↗</a></div>
+    <div class="writing-list">{{ range first 4 (where site.RegularPages "Section" "posts").ByDate.Reverse }}<a class="writing-row" href="{{ .RelPermalink }}"><time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006.01.02" }}</time><span>{{ .Title }}</span><span class="row-arrow" aria-hidden="true">↗</span></a>{{ else }}<p class="collection-empty">文章正在整理中。</p>{{ end }}</div>
+  </section>
+  {{ $projects := where site.RegularPages "Section" "projects" }}
+  <section class="collection-section collection-projects" aria-labelledby="projects-title">
+    <div class="collection-heading"><div><p class="collection-label">02 / SELECTED WORK</p><h2 id="projects-title">Projects</h2></div><a href="{{ "projects/" | relURL }}">All projects ↗</a></div>
+    {{ if $projects }}<div class="carousel-wrap"><div class="collection-track" id="home-projects" tabindex="0" aria-label="專案列表，可左右捲動">{{ range $projects.ByDate.Reverse }}<a class="collection-project" href="{{ .RelPermalink }}"><span class="project-number">{{ .Date.Format "2006" }} / PROJECT</span><h3>{{ .Title }}</h3><p>{{ .Summary | plainify | truncate 100 }}</p><span class="collection-card-arrow" aria-hidden="true">↗</span></a>{{ end }}</div>{{ if gt (len $projects) 1 }}<div class="carousel-controls"><button type="button" data-track="home-projects" data-direction="-1" aria-label="上一個專案">←</button><button type="button" data-track="home-projects" data-direction="1" aria-label="下一個專案">→</button></div>{{ end }}</div>{{ else }}<p class="collection-empty">作品正在整理中，之後會在這裡分享。</p>{{ end }}
+  </section>
+  {{ $photos := slice }}{{ range resources.Match "gallery/*" }}{{ if eq .ResourceType "image" }}{{ $photos = $photos | append . }}{{ end }}{{ end }}
+  <section class="collection-section collection-photos" aria-labelledby="photos-title">
+    <div class="collection-heading"><div><p class="collection-label">03 / THROUGH THE LENS</p><h2 id="photos-title">Photos</h2></div><a href="{{ "gallery/" | relURL }}">View gallery ↗</a></div>
+    {{ if $photos }}<div class="carousel-wrap"><div class="collection-track photo-track" id="home-photos" tabindex="0" aria-label="照片列表，可左右捲動">{{ range $photos }}{{ $thumb := .Resize "900x" }}<a class="collection-photo" href="{{ .RelPermalink }}" target="_blank" rel="noopener" aria-label="查看照片：{{ .Name | path.Base }}"><img src="{{ $thumb.RelPermalink }}" width="{{ $thumb.Width }}" height="{{ $thumb.Height }}" alt="{{ .Name | path.Base | strings.TrimSuffix (path.Ext .Name) }}" loading="lazy"></a>{{ end }}</div>{{ if gt (len $photos) 1 }}<div class="carousel-controls"><button type="button" data-track="home-photos" data-direction="-1" aria-label="上一張照片">←</button><button type="button" data-track="home-photos" data-direction="1" aria-label="下一張照片">→</button></div>{{ end }}</div>{{ else }}<p class="collection-empty">照片正在整理中，期待與你分享。</p>{{ end }}
+  </section>
+</div>
+<script>document.querySelectorAll('.carousel-controls button').forEach(function(button){button.addEventListener('click',function(){var track=document.getElementById(button.dataset.track);var item=track.firstElementChild;if(item)track.scrollBy({left:(item.getBoundingClientRect().width+16)*Number(button.dataset.direction),behavior:'smooth'});});});</script>
+{{ end }}
